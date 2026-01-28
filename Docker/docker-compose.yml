@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  php:
+    build:
+      context: ./php
+      dockerfile: Dockerfile
+    container_name: ${PHP_CONTAINER_NAME:-php-app}
+    volumes:
+      - ${PHP_INI_PATH:-./php/php.ini}:/usr/local/etc/php/conf.d/custom.ini:ro
+    tty: true

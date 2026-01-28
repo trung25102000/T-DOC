@@ -1,0 +1,85 @@
+---
+description: Generate Docker configuration for specific technology stack (php, node, python, etc.)
+alwaysApply: false
+---
+
+# Docker Generator Rule
+
+Khi user yêu cầu tạo Docker cho một công nghệ cụ thể, **CHỈ TẠO DUY NHẤT** công nghệ đó, không thêm bất kỳ service nào khác.
+
+## Nguyên tắc quan trọng
+
+- **Mỗi thư mục chỉ chứa 1 công nghệ duy nhất**
+- KHÔNG tự động thêm MySQL, Redis hay bất kỳ service phụ nào
+- Giữ cấu hình đơn giản, tối thiểu
+- **docker-compose.yml đặt ở thư mục Docker/, KHÔNG đặt trong thư mục con**
+
+## Cấu trúc thư mục
+
+```
+Docker/
+├── docker-compose.yml      # File compose chính
+├── .env.example            # Biến môi trường mẫu
+├── php/
+│   ├── Dockerfile
+│   ├── php.ini          # Cấu hình PHP (bắt buộc)
+│   └── README.md
+├── node/
+│   ├── Dockerfile
+│   └── README.md
+└── ...
+```
+
+Mỗi thư mục con (php, node, python...) chỉ chứa:
+- `Dockerfile` - cấu hình image
+- `README.md` - hướng dẫn
+- File cấu hình riêng (ví dụ: `php.ini` cho PHP)
+
+## docker-compose.yml
+
+Sử dụng biến môi trường cho các giá trị có thể thay đổi:
+
+```yaml
+container_name: ${PHP_CONTAINER_NAME:-php-app}
+volumes:
+  - ${PHP_SRC_PATH:-./php/src}:/app
+```
+
+Thêm biến tương ứng vào `.env.example`
+
+## Quy tắc tạo Docker
+
+**LUÔN sử dụng phiên bản MỚI NHẤT** - dùng tag `latest` hoặc version cao nhất hiện có.
+
+### PHP
+- Image: `php:latest` hoặc `php:8.4-cli`
+- Port: không cần expose nếu chỉ test CLI
+- **Bắt buộc tạo `php.ini`** với các setting cơ bản:
+  - memory_limit, upload_max_filesize, post_max_size
+  - error_reporting, display_errors
+  - date.timezone
+  - opcache settings
+- Copy php.ini vào `/usr/local/etc/php/conf.d/custom.ini` trong Dockerfile
+- Mount php.ini trong docker-compose.yml để có thể chỉnh sửa không cần rebuild
+
+### Node.js
+- Image: `node:latest` hoặc `node:22-alpine`
+- Port: 3000
+
+### Python
+- Image: `python:latest` hoặc `python:3.13-slim`
+- Port: 8000
+
+### MySQL
+- Image: `mysql:latest` hoặc `mysql:9.0`
+- Port: 3306
+
+### Redis
+- Image: `redis:latest` hoặc `redis:7-alpine`
+- Port: 6379
+
+## Yêu cầu
+
+1. `docker-compose.yml` chỉ có 1 service duy nhất
+2. `README.md` hướng dẫn ngắn gọn
+3. Lệnh test để verify
