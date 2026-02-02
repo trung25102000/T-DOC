@@ -1,11 +1,39 @@
-version: '3.8'
-
 services:
-  php:
+  app:
     build:
       context: ./php
       dockerfile: Dockerfile
     container_name: ${PHP_CONTAINER_NAME:-php-app}
     volumes:
-      - ${PHP_INI_PATH:-./php/php.ini}:/usr/local/etc/php/conf.d/custom.ini:ro
-    tty: true
+      - ../src/php:/var/www/html
+      - ./php/php.ini:/usr/local/etc/php/conf.d/custom.ini:ro
+    environment:
+      - PHP_INI_PATH=${PHP_INI_PATH:-/usr/local/etc/php/conf.d}
+      - PHP_SRC_PATH=${PHP_SRC_PATH:-/var/www/html}
+    expose:
+      - "9000"
+    networks:
+      - app-network
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: ${NGINX_CONTAINER_NAME:-nginx-app}
+    ports:
+      - ${NGINX_PORT_HTTP:-80}:80
+      - ${NGINX_PORT_HTTPS:-443}:443
+    volumes:
+      - ../src/php:/var/www/html                            # Source code
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro         # Main config (readonly)
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro                 # HTTP configs (readonly)
+      - ./nginx/ssl:/etc/nginx/ssl                          # SSL configs & certificates (read-write)
+      - ./nginx/logs:/var/log/nginx                         # Logs
+    depends_on:
+      - app
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

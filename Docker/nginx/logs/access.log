@@ -1,0 +1,6 @@
+192.168.65.1 - - [02/Feb/2026:16:39:01 +0000] "GET / HTTP/1.1" 200 140 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+192.168.65.1 - - [02/Feb/2026:16:48:53 +0000] "GET / HTTP/1.1" 200 140 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+192.168.65.1 - - [02/Feb/2026:16:50:29 +0000] "GET / HTTP/2.0" 200 128 "-" "curl/7.84.0" "-"
+192.168.65.1 - - [02/Feb/2026:16:50:34 +0000] "HEAD / HTTP/1.1" 301 0 "-" "curl/7.84.0" "-"
+192.168.65.1 - - [02/Feb/2026:16:51:19 +0000] "GET / HTTP/1.1" 301 162 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36" "-"
+192.168.65.1 - - [02/Feb/2026:16:51:28 +0000] "GET / HTTP/2.0" 200 129 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36" "-"

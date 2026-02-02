@@ -1,14 +1,18 @@
-FROM php:latest
+FROM php:8.4-fpm
 
-ARG TZ
-ARG PHP_INI_PATH
-ARG PHP_TIMEZONE
-ARG PHP_SESSION_SAVE_PATH
+#working directory
+WORKDIR /var/www/html
 
-# Set timezone
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    libzip-dev \
+    bash \
+    && docker-php-ext-install pdo_mysql pdo_pgsql zip \
+    && docker-php-ext-enable pdo_mysql pdo_pgsql zip \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copy php.ini
-COPY $PHP_INI_PATH /usr/local/etc/php/conf.d/custom.ini
+# Expose PHP-FPM port
+EXPOSE 9000
 
-CMD ["php", "-a"]
+CMD ["php-fpm"]

@@ -1,0 +1,13 @@
+# SSL Directory
+# 
+# Chứa 2 loại file:
+# 1. SSL Configs (*.conf) - Nginx sẽ load tất cả file .conf trong thư mục này
+#    Example: ssl.conf, api-ssl.conf
+#
+# 2. SSL Certificates - Private keys và certificates
+#    Example: cert.pem, key.pem
+#
+# Usage:
+#   cp ssl.conf.example ssl.conf
+#   openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+#     -keyout key.pem -out cert.pem

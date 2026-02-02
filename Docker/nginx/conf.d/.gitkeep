@@ -1,0 +1,9 @@
+# HTTP Server Configs
+# 
+# Nginx sẽ load tất cả file *.conf trong thư mục này
+# Dùng cho HTTP (port 80) server blocks
+#
+# Examples:
+#   - default.conf (HTTP default site)
+#   - api.conf (API endpoints)
+#   - static.conf (Static files server)
